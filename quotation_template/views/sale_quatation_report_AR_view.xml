@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="custom_quotation_AR">
+            <!--<t t-call="report.internal_layout">-->
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page o_report_layout_boxed">
+
+                        <!--#######################-->
+                        <div class="oe_structure"/>
+
+                        <div class="container ">
+                            <div class="row mb4 " style="border: 2px solid black !important;">
+                                <div class="col-xs-7">
+                                    <img t-if="doc.company_id.logo"
+                                         t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.logo)"
+                                         style="max-width:auto ;height:120px ;padding-left:15px;padding-top:5px;padding-bottom:5px"/>
+
+
+                                    <span style="text-align:center; display:inline;font-size: 18px;padding-left:120px;">
+                                        <b>فاتورة‬</b>
+                                    </span>
+
+                                </div>
+                                <div class="col-xs-5  mp5" style="border-left: 2px solid black !important;">
+                                    <!--<h4 class="mt0" t-field="company.report_header"/>-->
+                                    <div align="center">
+                                        <br/>
+                                        <b>
+                                            <span style="font-size: 17px;">شركة وردة تريفي فرنتشر</span>
+                                        </b>
+                                        <br/>
+                                        <span style="font-size: 11px;color:gray;"
+                                              t-field="doc.company_id.report_header"/>
+                                        <br/>
+
+
+                                    </div>
+
+                                    <div align="left" style="font-size: 10px;">
+                                        <span>طريق سلوى مجمع العين التجاري</span>
+
+                                        <br/>
+                                        <span>صندوق بريد 37661 الدوحة قطر</span>
+
+                                        <br/>
+
+                                        <span>44 30023/55058027 :هاتف</span>
+
+
+                                        <br/>
+                                        <span>44 515873 :فاكس</span>
+
+                                        <span style="float:right;display:inline;position: absolute;right:0px;padding:20px;top:30px;">
+                                            <img t-if="doc.company_id.logo_2"
+                                                 t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.logo_2)"
+                                                 style="max-width:auto ;height:60px ;padding-left:15px;padding-top:5px;padding-bottom:5px"/>
+                                        </span>
+
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="row mb4 " style="border: 2px solid black !important;">
+
+                            <div class="col-xs-7" style="text-align:right;">
+
+                                <t>
+
+                                    <b>
+                                        <span t-if="doc.partner_id.name_ar" t-field="doc.partner_id.name_ar"/>
+                                        <span t-elif="doc.partner_id.name" t-field="doc.partner_id.name"/>
+                                        <span t-else=""/>
+
+                                    </b>
+                                    <b>:</b>
+                                    <b>اسم العميل</b>
+
+
+                                </t>
+                                <br/>
+                                <t>
+
+
+                                    <span t-if="doc.partner_id.mobile" t-field="doc.partner_id.mobile"/>
+
+                                    <b>:</b>
+                                    <b>رقم الجوال
+
+                                    </b>
+
+                                </t>
+                                <br/>
+                                <t t-if="doc.partner_id.email">
+
+                                    <span t-field="doc.partner_id.email"/>
+                                    <b>:</b>
+                                    <b>البريد الالكتروني</b>
+
+                                </t>
+                            </div>
+
+                            <div class="col-xs-5" style="border-left: 2px solid black !important;">
+
+                                <t t-if="doc.name">
+                                    <b>فاتورة رقم:
+                                        <span t-field="doc.name"/>
+                                    </b>
+
+                                </t>
+                                <br/>
+                                <t t-if="doc.company_id.phone">
+                                    <b>تاريخ:</b>
+                                    <b>
+                                        <span t-field="doc.date_order" t-options='{"format": "MMMM-dd-yyyy"}'/>
+                                    </b>
+
+                                </t>
+                                <br/>
+                                <t t-if="doc.company_id.city">
+                                    <b>الفرع :
+                                        <span t-field="doc.company_id.city"/>
+                                    </b>
+
+                                </t>
+                            </div>
+
+
+                        </div>
+
+                        <div class="oe_structure"/>
+                        <!-- Is there a discount on at least one line? -->
+                        <t t-set="display_discount" t-value="any([l.discount for l in doc.order_line])"/>
+
+                        <t t-foreach="doc.order_lines_layouted()" t-as="page">
+                            <div class="clearfix">
+                                <div class="container">
+                                    <div class="row" style="font-size: 13x;clear:both;">
+                                        <table class="table table-bordered o_boxed_table"
+                                               style="border: 2px solid black !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-right">Description</th>
+                                                    <th t-if="doc.img_include == True">Photo</th>
+                                                    <th class="text-right">Quantity</th>
+                                                    <th class="text-right">Unit</th>
+                                                    <th class="text-right">Net Price</th>
+                                                    <th t-if="display_discount" class="text-right"
+                                                        groups="sale.group_discount_per_so_line">
+                                                        Disc.(%)
+                                                    </th>
+                                                    <!--<th class="text-right">Taxes</th>-->
+                                                    <th class="text-right" groups="sale.group_show_price_subtotal">
+                                                        Amount
+                                                    </th>
+                                                    <th class="text-right price_tax_included"
+                                                        groups="sale.group_show_price_total">
+                                                        Total
+                                                        Price
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="sale_tbody">
+                                                <t t-foreach="page" t-as="layout_category">
+
+                                                    <t t-if="layout_category_size &gt; 1 or page_size &gt; 1"
+                                                       groups="sale.group_sale_layout">
+                                                        <tr class="active">
+                                                            <td colspan="7"
+                                                                style="font-weight: bold; border-bottom: 1px solid black;">
+                                                                &amp;bull;
+                                                                <t t-esc="layout_category['name']"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+
+                                                    <!-- Lines associated -->
+                                                    <t t-foreach="layout_category['lines']" t-as="l">
+                                                        <tr>
+                                                            <td class="text-right">
+                                                                <span t-if="l.product_id.name_ar"
+                                                                      t-field="l.product_id.name_ar"/>
+                                                                <span t-elif="l.name" t-field="l.name"/>
+                                                                <span t-else=""/>
+
+
+                                                            </td>
+                                                            <td t-if="doc.img_include== True">
+                                                                <img t-if="l.product_id.image"
+                                                                     t-att-src="'data:image/png;base64,%s' % to_text(l.product_id.image)"
+                                                                     style="max-width:auto ;height:60px ;"/>
+
+                                                            </td>
+                                                            <td class="text-right">
+                                                                <span t-field="l.product_uom_qty"/>
+
+                                                            </td>
+                                                            <td class="text-right">
+
+                                                                <span t-if="l.product_uom.name_ar" t-field="l.product_uom.name_ar"
+                                                                      groups="product.group_uom"/>
+                                                                <span t-elif="l.product_uom.name" t-field="l.product_uom.name"
+                                                                      groups="product.group_uom"/>
+                                                                <span t-else=""
+                                                                      groups="product.group_uom"/>
+
+                                                            </td>
+
+                                                            <td class="text-right">
+                                                                <span t-field="l.price_unit"/>
+                                                            </td>
+                                                            <td t-if="display_discount" class="text-right"
+                                                                groups="sale.group_discount_per_so_line">
+                                                                <span t-field="l.discount"/>
+                                                            </td>
+                                                            <!--<td class="text-right">
+                                                                <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.tax_id))"/>
+                                                            </td>-->
+                                                            <td class="text-right"
+                                                                groups="sale.group_show_price_subtotal">
+                                                                <span t-field="l.price_subtotal"
+                                                                      t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                                            </td>
+                                                            <td class="text-right" groups="sale.group_show_price_total">
+                                                                <span t-field="l.price_total"
+                                                                      t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+
+                                                    <t t-if="(layout_category_size &gt; 1 or page_size &gt; 1) and layout_category['subtotal']"
+                                                       groups="sale.group_sale_layout">
+                                                        <tr class="text-right">
+                                                            <td colspan="6">
+                                                                <strong>Subtotal:</strong>
+                                                                <t t-set="subtotal"
+                                                                   t-value="sum(line.price_subtotal for line in layout_category['lines'])"/>
+                                                                <span t-esc="subtotal"
+                                                                      t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <t t-if="page_index &lt; page_size - 1" groups="sale.group_sale_layout">
+                                <p style="page-break-before:always;"/>
+                            </t>
+                        </t>
+
+                        <div class="row" name="total">
+                            <div class="col-xs-4 pull-right">
+                                <table class="table table-condensed"
+                                       style="border:2px solid #000000;min-width: 200px;max-width: 350px;">
+                                    <tr class="border-black">
+                                        <td>
+                                            <strong>Subtotal QAR</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="doc.amount_untaxed"
+                                                  t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <t t-foreach="doc._get_tax_amount_by_group()" t-as="amount_by_group">
+                                        <tr style="border-bottom:1px solid #dddddd;">
+                                            <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
+                                                <td>
+                                                    <span t-esc="amount_by_group[0]"/>
+                                                    <span>&amp;nbsp;<span>on</span>&amp;nbsp;
+                                                        <t t-esc="amount_by_group[2]"
+                                                           t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                                    </span>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="amount_by_group[1]"
+                                                          t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td>
+                                                    <span t-esc="amount_by_group[0]"/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="amount_by_group[1]"
+                                                          t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                    <tr class="border-black">
+                                        <td>
+                                            <strong>Total QAR</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="doc.amount_total"
+                                                  t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+
+
+                        <div class="container" style="position:relative;page-break-inside: avoid;">
+                            <div class="row"
+                                 style="text-align:right;font-size:10px;color:black;border: 1px solid black !important;">
+                                <div class="col-xs-12">
+
+                                    <u>
+                                        <b>الشروط و الاحكام :</b>
+                                    </u>
+                                    <br/>
+                                    <b>مدة الصلاحيه:</b>
+                                    تسري صلاحيه هذا العرض لمدة ثلاثه ايام. عرض السعر غير صالح بدون ختم الشركة.
+                                    <br/>
+                                    <b>طريقه الدفع:</b>
+                                    1. جميع الأثاث والإكسسوارات والإضاءة - تطلب الشركة 60٪ دفعة اولى, 20% عند شحن
+                                    البضاعة, 20% قبل التسليم.
+                                    <br/>
+
+
+                                    &#160;&#160; الاقمشة: يدفع ثمنها كاملا عند توقيع العقد.
+                                    <br/>
+                                    &#160;&#160; المفروشات المستوردة: 60٪؜ دفعة اولى، 25٪؜ عند شحن البضاعة، 25٪؜ قبل
+                                    التركيب.
+                                    <br/>
+                                    &#160;&#160; اي فاتورة لا يتجاوز سعرها ١٥،٠٠٠ ريال يتم دفعها بالكامل
+                                    <br/>
+
+                                    <b>البضائع الغير مستلمه :</b>
+                                    :سيتم تطبيق غرامه تخزين بقيمه 5% من إجمالي الفاتورة في الشهر كحد ادنى اذا لم يتم
+                                    استلام البضائع خلال 15 يوما من تاريخ اشعار الوصول
+                                    <br/>
+                                    &#160;&#160;
+                                    <b>
+                                        <U>عدم الدفع من قبل العملاء:</U>
+                                    </b>
+                                    سيتم تطبيق رسوم تخزين بنسبة 2٪ من إجمالي قيمة الفاتورة للأسبوعين الأولين و 2٪ لأي
+                                    أسبوع إضافي بحد أقصى 20٪ من إجمالي الفاتورة.
+
+                                    <br/>
+
+
+                                    <b>أمر عمل:</b>
+                                    طلبات العمل يجب ان يوافق عليها و توقع من قبل العميل قبل البدء بالمشروع
+                                    <br/>
+
+                                    <u>
+                                        <b>التوصيل:</b>
+                                    </u>
+                                    <br/>
+
+                                    120 يوم عمل تحتسب من بعد دفع الدفعة الأولى وتوقيع أمر العمل
+                                    <br/>
+                                    <u>
+                                        <b>الدفعات وسياسة التوصيل:</b>
+                                    </u>&#160; &#160;
+                                    لا يمكن تسليم اي قطعة قبل دفع الدفعة النهائية على ان يتم احتساب الموعد 120 يوم
+                                    ابتداء من تاريخ دفع الدفعة الأولى
+                                    <br/>
+                                    <b>
+                                        <u>الوصول الي الموقع :</u>
+                                    </b>&#160; &#160;
+                                    الوصول الي الموقع : سوف يكون من مسئوليات العميل, علي سبيل المثال لا الحصر إيجار
+                                    السقالات ورسوم عبور البوابات وغيرها من التكاليف الاضافية التي يجب ان يتحملها العميل
+                                    <br/>
+                                    <b>
+                                        <u>التأخر في التسليم:</u>
+                                    </b>&#160; &#160;
+                                    في حال التأخر في التسليم تتحمل شركة تريفي وردة نسبة ١٪؜ من قيمة البضاعة المتبقية او
+                                    مبلغ 3000 ريال ايهما اقل على ان يتم الخصم فقط في حال تم سداد كامل المبلغ من قبل
+                                    العميل.
+                                    <br/>
+                                    <b>
+                                        <u>الالغاء:</u>
+                                    </b>
+                                    في حالة الالغاء بعد ٢٤ ساعة من تأكيد الطلبية لاي سبب كان، يتم احتساب نسبة تحمل
+                                    وقيمتها ١٥٪ من اجمالي الفاتورة.
+                                    <br/>
+                                    <b>ملاحظة: تطبق كافة الشروط والأحكام المذكورة اعلاه.</b>
+
+
+                                </div>
+                            </div>
+                            <!--<div class="row"-->
+                            <!--style="color:gray;text-align:center;font-size:10px;color:black;border: 1px solid black !important;">-->
+                            <!--<div class="col-xs-12">-->
+                            <!--<b>ملاحظة: يرجى الدفع بالفيزا او ماستر  كارد, او اصدار شيك فقط بأسم: وردة تريفي فيرنتشر, او تحويل بنكي على رقم الحساب التالي :</b>-->
+                            <!--</div>-->
+                            <!--</div>-->
+
+
+                            <div class="row"
+                                 style="color:black;text-align:center;font-size:10px;color:black;border: 1px solid black !important;">
+                                <div class="col-xs-12">
+
+
+                                    <b>ملاحظة: يرجى الدفع بالفيزا او ماستر كارد, او اصدار شيك فقط بأسم: وردة تريفي
+                                        فيرنتشر, او تحويل بنكي على رقم الحساب التالي :
+                                    </b>
+
+                                    <br/>
+                                    Swift Code:
+                                    <b>CBQAQAQA</b>
+                                    <br/>
+                                    IBAN:
+                                    <b>QA35CBQA000000004580583580001</b>
+                                    <br/>
+                                    Bank Address:
+                                    <b>GRAND HAMAD BRANCH, DOHA QATAR</b>
+                                    <br/>
+
+
+                                </div>
+                            </div>
+                            <div class="row" style="text-align:right;font-size:10px;color:black !important;">
+                                <div class="col-xs-12">
+
+                                    من خلال توقيع هذا العرض، فإنك تفهم وتوافق على بنود وشروط مبيعات تريفي على الجزء
+                                    الخلفي
+                                    <br/>
+                                    من هذا العرض. نأمل أن يفي عرضنا بموافقتك. إذا كان لديك أي توضيحات، لا تتردد في
+                                    الاتصال بنا.
+                                    <br/>
+                                    <!--Sincerely yours,-->
+                                    <!--<span style="float:right;display:inline;position: absolute;right:150px;">Client's-->
+                                    <!--Approval-->
+                                    <!--</span>-->
+
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin:20px;text-align:left;font-size:10px;color:black !important;">
+                                <div class="col-xs-12">
+                                    <t t-if="doc.partner_id.name_ar">
+                                        <span style="float:right;display:inline;position: absolute;right:150px;">
+                                            <b>
+                                                <span t-field="doc.partner_id.name_ar"/>
+                                            </b>
+
+                                        </span>
+                                    </t>
+                                    <t t-if="doc.user_id">
+                                        <span style="float:left;display:inline;position: absolute;">
+                                            <b>
+                                                <span t-field="doc.user_id.name"/>
+                                            </b>
+
+                                        </span>
+                                    </t>
+
+                                    <t t-if="doc.user_id">
+                                        <span style="margin:auto; display:table;">
+                                            <b>
+                                                <span t-field="doc.user_id.name"/>
+                                            </b>
+
+                                        </span>
+                                    </t>
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <!--<p t-field="doc.note"/>-->
+                        <!--<p t-if="doc.payment_term_id.note">-->
+                        <!--    <span t-field="doc.payment_term_id.note"/>-->
+                        <!--</p>-->
+                        <!--<p id="fiscal_position_remark" t-if="doc.fiscal_position_id and doc.fiscal_position_id.note">-->
+                        <!--    <strong>Fiscal Position Remark:</strong>-->
+                        <!--    <span t-field="doc.fiscal_position_id.note"/>-->
+                        <!--</p>-->
+                        <!--<div class="oe_structure"/>-->
+
+                    </div>
+
+
+                    <!--<div class="footer o_boxed_footer">-->
+                    <!--    <div class="text-center">-->
+                    <!--        <ul class="list-inline">-->
+                    <!--            <li t-if="doc.company_id.phone">Tel:-->
+                    <!--                <span t-field="doc.company_id.phone"/>-->
+                    <!--            </li>-->
+                    <!--            <li t-if="doc.company_id.email">Mail:-->
+                    <!--                <span t-field="doc.company_id.email"/>-->
+                    <!--            </li>-->
+                    <!--            <li t-if="doc.company_id.website">Web:-->
+                    <!--                <span t-field="doc.company_id.website"/>-->
+                    <!--            </li>-->
+                    <!--            <li t-if="doc.company_id.vat"><t t-esc="doc.company_id.country_id.vat_label or 'TIN'"/>:-->
+                    <!--                <span t-field="company.vat"/>-->
+                    <!--            </li>-->
+                    <!--        </ul>-->
+                    <!--<div t-field="company.report_footer"/>-->
+                    <!--        <div>-->
+                    <!--            Page:-->
+                    <!--            <span class="page"/>-->
+                    <!--            /-->
+                    <!--            <span class="topage"/>-->
+                    <!--        </div>-->
+                    <!--    </div>-->
+                    <!--</div>-->
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

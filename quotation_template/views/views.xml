@@ -1,0 +1,73 @@
+<openerp>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+
+        <record id="partner_arabic_name" model="ir.ui.view">
+            <field name="name">Customer Name Arabic</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="name_ar" placeholder="إسم" class="text-right"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="product_arabic_name" model="ir.ui.view">
+            <field name="name">Product Name Arabic</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="name_ar" placeholder="إسم" class="text-right"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="product_uom_arabic_name" model="ir.ui.view">
+            <field name="name">Product UOM Arabic</field>
+            <field name="model">product.uom</field>
+            <field name="inherit_id" ref="product.product_uom_form_view"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="name_ar" placeholder="إسم" class="text-right"/>
+                </xpath>
+
+            </field>
+        </record>
+
+            <!-- Inherit Form View to Modify it -->
+            <record id="imag_includ_inhrit" model="ir.ui.view">
+                <field name="name">Quotation Imag filds</field>
+                <field name="model">sale.order</field>
+                <field name="inherit_id" ref="sale.view_order_form"/>
+                <field name="arch" type="xml">
+
+                    <xpath expr="//field[@name='payment_term_id']" position="after">
+                        <!-- Add your fields or attributes here -->
+                        <field name="img_include"/>
+                    </xpath>
+
+                </field>
+            </record>
+        <record id="company_logo_2" model="ir.ui.view">
+                <field name="name">Company logo inherit</field>
+                <field name="model">res.company</field>
+                <field name="inherit_id" ref="base.view_company_form"/>
+                <field name="arch" type="xml">
+
+                    <xpath expr="//field[@name='report_header']" position="after">
+                        <!-- Add your fields or attributes here -->
+                        <field name="logo_2" widget="image"/>
+                    </xpath>
+
+                </field>
+            </record>
+
+    </data>
+</openerp>

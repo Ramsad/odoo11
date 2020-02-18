@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+            id="custom_quatation_report"
+            paperformat="paperformat_custom"
+            model="sale.order"
+            string="Custom Quotation"
+            report_type="qweb-pdf"
+            name="quotation_template.custom_quotation"
+            file="quotation_template.custom_quotation"
+
+    />
+    <report
+            id="custom_quotation_report_AR"
+            paperformat="paperformat_custom"
+            model="sale.order"
+            string="Custom Quotation Arabic"
+            report_type="qweb-pdf"
+            name="quotation_template.custom_quotation_AR"
+            file="quotation_template.custom_quotation_AR"
+
+    />
+</odoo>
+
