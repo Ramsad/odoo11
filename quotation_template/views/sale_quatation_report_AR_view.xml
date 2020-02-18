@@ -207,9 +207,11 @@
                                                             </td>
                                                             <td class="text-right">
 
-                                                                <span t-if="l.product_uom.name_ar" t-field="l.product_uom.name_ar"
+                                                                <span t-if="l.product_uom.name_ar"
+                                                                      t-field="l.product_uom.name_ar"
                                                                       groups="product.group_uom"/>
-                                                                <span t-elif="l.product_uom.name" t-field="l.product_uom.name"
+                                                                <span t-elif="l.product_uom.name"
+                                                                      t-field="l.product_uom.name"
                                                                       groups="product.group_uom"/>
                                                                 <span t-else=""
                                                                       groups="product.group_uom"/>
@@ -237,6 +239,18 @@
                                                             </td>
                                                         </tr>
                                                     </t>
+                                                    <tr t-foreach="range(max(13-len(layout_category['lines']),0))"
+                                                        t-as="l">
+                                                        <td t-translation="off">&amp;nbsp;</td>
+                                                        <td t-if="doc.img_include== True"/>
+                                                        <td/>
+                                                        <td/>
+
+                                                        <td/>
+                                                        <td/>
+                                                        <td t-if="display_discount" class="text-right"
+                                                            groups="sale.group_discount_per_so_line"/>
+                                                    </tr>
 
                                                     <t t-if="(layout_category_size &gt; 1 or page_size &gt; 1) and layout_category['subtotal']"
                                                        groups="sale.group_sale_layout">

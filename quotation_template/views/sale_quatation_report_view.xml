@@ -159,7 +159,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Description</th>
-                                                   <th t-if="doc.img_include == True">Photo</th>
+                                                    <th t-if="doc.img_include == True">Photo</th>
                                                     <th class="text-right">Quantity</th>
                                                     <th class="text-right">Unit</th>
                                                     <th class="text-right">Net Price</th>
@@ -198,8 +198,10 @@
                                                             <td>
                                                                 <span t-field="l.name"/>
                                                             </td>
-                                                             <td t-if="doc.img_include== True">
-                                                              <img t-if="l.product_id.image" t-att-src="'data:image/png;base64,%s' % to_text(l.product_id.image)" style="max-width:auto ;height:60px ;"/>
+                                                            <td t-if="doc.img_include== True">
+                                                                <img t-if="l.product_id.image"
+                                                                     t-att-src="'data:image/png;base64,%s' % to_text(l.product_id.image)"
+                                                                     style="max-width:auto ;height:60px ;"/>
 
                                                             </td>
                                                             <td class="text-right">
@@ -233,6 +235,21 @@
                                                             </td>
                                                         </tr>
                                                     </t>
+
+                                                    <tr t-foreach="range(max(13-len(layout_category['lines']),0))"
+                                                        t-as="l">
+                                                        <td t-translation="off">&amp;nbsp;</td>
+                                                        <td t-if="doc.img_include== True"/>
+
+                                                        <td/>
+                                                        <td/>
+
+                                                        <td/>
+                                                        <td/>
+                                                        <td t-if="display_discount" class="text-right"
+                                                            groups="sale.group_discount_per_so_line"/>
+                                                    </tr>
+
 
                                                     <t t-if="(layout_category_size &gt; 1 or page_size &gt; 1) and layout_category['subtotal']"
                                                        groups="sale.group_sale_layout">
